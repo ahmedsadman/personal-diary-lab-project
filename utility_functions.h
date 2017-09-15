@@ -138,9 +138,10 @@ void GetPass(char mypass[])
 	// Reads the password stored in the file
 	FILE *fp;
 	char pass[50];
-	fp = fopen("userinfo.dat", "rb");
+	fp = fopen("userinfo.dat", "r");
 	fgets(pass, 255, fp);
 	decrypt(pass, "_1a2d_");
+	fclose(fp);
 	strcpy(mypass, pass);
 }
 
