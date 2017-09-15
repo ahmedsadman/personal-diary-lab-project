@@ -41,15 +41,15 @@ struct tm *getCurrentTime()
 int generateToken(char key[])
 {
 	// generates a token that is needed for the encryption
-	int token = strlen(key);
+	int token = strlen(key) * 2;
 	int i;
 
 	for (i = 0; i < strlen(key); i++)
 	{
 		if (i % 2)
-			token -= key[i];
+			token -= key[i] / 2;
 		else
-			token += key[i];
+			token += key[i] / 2;
 	}
 
 	// if in any rare case, token exceeds ascii limit
@@ -62,12 +62,13 @@ void encrypt(char text[], char key[])
 {
 	int i = 0;
 	int token = generateToken(key);
+
 	while (1)
 	{
 		if (text[i] == '\0')
 			break;
 
-		text[i] = text[i] + token;
+		text[i] = (i % 2 == 0) ? text[i] + token : text[i] - token;
 		i++;
 	}
 }
@@ -82,7 +83,7 @@ void decrypt(char text[], char key[])
 		if (text[i] == '\0')
 			break;
 
-		text[i] = text[i] - token;
+		text[i] = (i % 2 == 0) ? text[i] - token : text[i] + token;
 		i++;
 	}
 }
