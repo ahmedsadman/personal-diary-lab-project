@@ -1,4 +1,4 @@
-/* 
+/*
 THIS HEADER FILE CONTAINS NECESSARY SIDE-FUNCTIONS
 THAT ARE NEEDED IN THE MAIN PROGRAM
 */
@@ -124,6 +124,7 @@ void inputpass(char pass[])
 
 void SetPass(char pass[])
 {
+	// writes the password to the file
 	FILE *fp;
 	fp = fopen("userinfo.dat", "w");
 	// 2nd argument is a random encryption key, should be kept secret
@@ -155,4 +156,15 @@ bool checkPass(char userinput[])
 		return true;
 	else
 		return false;
+}
+
+void changePass(char password[])
+{
+	// changes current user password
+	char pass[50];
+	puts("Type your new password: ");
+	inputpass(pass);
+	strcpy(password, pass);
+	SetPass(pass);
+	puts("# Password set successfully #");
 }

@@ -83,7 +83,7 @@ int main(void)
 				printelements(head);
 			else if (choice == 3)
 			{
-				break;
+				changePass(password);
 			}
 			else if (choice == 4)
 			{
