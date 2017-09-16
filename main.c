@@ -162,15 +162,38 @@ void addEntry(struct entry **head)
 		current = *head;
 		previous = NULL;
 		strcpy(newDate, reverseDate(n->date));
+		int track = 0; // keeps track of whether record with same date is found, so that new record can be SORTED by time
+
 		while (current != NULL)
 		{
-			// finds where to put the record (added in sorted order)
+			// finds where to put the record (added in sorted order, by date)
 			strcpy(currentDate, reverseDate(current->date));
-			if (strcmp(newDate, currentDate) < 0)
+
+			if (strcmp(newDate, currentDate) == 0)
+			{
+				// sorted by time
+				track = 1;
+				while (current != NULL && strcmp(newDate, currentDate) == 0)
+				{
+					if (checkTime(n->time, current->time) < 0 || checkTime(n->time, current->time) == 0)
+					{
+						// n->time should be smaller to return negative value
+						break;
+					}
+
+					previous = current;
+					current = current->next;
+					if (current != NULL) strcpy(currentDate, reverseDate(current->date));
+				}
+			}
+			else if (strcmp(newDate, currentDate) < 0)
 				break;
 
-			previous = current;
-			current = current->next;
+			if (track == 0)
+			{
+				previous = current;
+				current = current->next;
+			} else break;
 		}
 
 		// places the record and updates the linked list

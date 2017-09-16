@@ -38,6 +38,27 @@ struct tm *getCurrentTime()
 	return info;
 }
 
+int checkTime(char t1[], char t2[])
+{
+	// return -1 if t1 is less than t2, 0 if both are same, 1 otherwise
+	int greater;
+	char *ret1, *ret2;
+	if (strcmp(t1, t2) == 0) // both same
+		return 0;
+	else if (strcmp(t1, t2) < 0) // t1 is smaller
+		greater = 2;
+	else // t2 is smaller
+		greater = 1;
+
+	ret1 = strstr(t1, "AM");
+	ret2 = strstr(t2, "AM");
+
+	if ((ret1 && ret2 && greater == 1) || (!ret1 && !ret2 && greater == 1) || (!ret1 && ret2))
+		return 1;
+	else if ((ret1 && ret2 && greater == 2) || (!ret1 && !ret2 && greater == 2) || (ret1 && !ret2))
+		return -1;
+}
+
 int generateToken(char key[])
 {
 	// generates a token that is needed for the encryption
