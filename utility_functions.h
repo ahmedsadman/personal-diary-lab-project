@@ -8,6 +8,7 @@ THAT ARE NEEDED IN THE MAIN PROGRAM
 #include <conio.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <ctype.h>
 
 bool fileExist(char fname[])
 {
@@ -26,6 +27,33 @@ char *reverseDate(char d[])
 	sscanf(d, "%d/%d/%d", &day, &month, &year);
 	sprintf(buffer, "%d/%d/%d", year, month, day);
 	return buffer;
+}
+
+void formatDate(char d[])
+{
+	// formats a date properly using dd/mm/yyyy style
+	// for example, 9/12/2016 will be converted to 09//12/2016, similarly 1/1/1996 would be 01/01/1996
+	int day, month, year;
+	char f_date[50];
+	sscanf(d, "%d/%d/%d", &day, &month, &year);
+	sprintf(f_date, "%02d/%02d/%d", day, month, year);
+	strcpy(d, f_date);
+}
+
+void formatTime(char t[])
+{
+	// formats time properly using "hh:mm meridian" format
+	// 2:30 am will be converted to 02:30 AM
+	int h, m, i;
+	char f_time[20];
+	char meridian[5];
+	sscanf(t, "%d:%d %s", &h, &m, meridian);
+
+	for (i = 0; i < strlen(meridian); i++)
+		meridian[i] = toupper(meridian[i]);
+
+	sprintf(f_time, "%02d:%02d %s", h, m, meridian);
+	strcpy(t, f_time);
 }
 
 struct tm *getCurrentTime()

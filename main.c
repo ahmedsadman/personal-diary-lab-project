@@ -141,14 +141,15 @@ void addEntry(struct entry **head)
 
 		printf("Date: %s\n", n->date);
 		printf("Time: %s\n", n->time);
-	}
+	} else formatDate(n->date);
 
 	// checks if n->time is already filled up (by previous IF)
 	if (!strcmp(n->time, ""))
 	{
 		printf("Time: ");
 		gets(n->time);
-	}
+	} 
+	formatTime(n->time);
 
 	printf("Text: ");
 	gets(n->content);
