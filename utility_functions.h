@@ -90,20 +90,17 @@ int checkTime(char t1[], char t2[])
 int generateToken(char key[])
 {
 	// generates a token that is needed for the encryption
-	int token = strlen(key) * 2;
+	int token = strlen(key) / 2;
 	int i;
 
 	for (i = 0; i < strlen(key); i++)
 	{
 		if (i % 2)
-			token -= key[i] / 2;
+			token -= key[i] % 10;
 		else
-			token += key[i] / 2;
+			token += key[i] % 10;
 	}
 
-	// if in any rare case, token exceeds ascii limit
-	if (token < 0) token = 1;
-	if (token > 127) token = 126;
 	return token;
 }
 
