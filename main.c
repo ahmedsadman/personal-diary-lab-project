@@ -21,7 +21,8 @@ void addEntry(struct entry **head);
 void write_to_file(struct entry *head, char pass[]);
 struct entry *load(struct entry *head, char pass[]);
 void printelements(struct entry *head);
-
+void delete_record(struct entry **head);
+void print_record(struct entry *head);
 
 int main(void)
 {
@@ -61,18 +62,18 @@ int main(void)
 	{
 		intro_screen(choice);
 		key_press = getche();
-		if (choice > 4 || choice < 1) choice = 1;
+		if (choice > 5 || choice < 1) choice = 1;
 
 		if (key_press == 72) // UP Arrow
 		{
 			choice--;
-			if (choice > 4 | choice < 1) choice = 1;
+			if (choice > 5 | choice < 1) choice = 1;
 			intro_screen(choice);
 		}
 		else if (key_press == 80) // Down Arrow
 		{
 			choice++;
-			if (choice > 4 || choice < 1) choice = 1;
+			if (choice > 5 || choice < 1) choice = 1;
 			intro_screen(choice);
 		}
 		else if (key_press == 13) // ENTER Key
@@ -82,10 +83,12 @@ int main(void)
 			else if (choice == 2)
 				printelements(head);
 			else if (choice == 3)
+				delete_record(&head);
+			else if (choice == 4)
 			{
 				changePass(password);
 			}
-			else if (choice == 4)
+			else if (choice == 5)
 			{
 				write_to_file(head, password);
 				break;
@@ -96,6 +99,71 @@ int main(void)
 	return 0;
 }
 
+void delete_record(struct entry **head) {
+	struct entry *previous, *current, *current2, *previous2;
+	char d[50];
+	char choice;
+	int i, n = 0;
+	fflush(stdout);
+	printf("-------\n");
+	printf("Date: ");
+	fflush(stdin);
+	scanf("%s", &d);
+	formatDate(d);
+
+	previous = NULL;
+	current = *head;
+	current2 = previous2 = NULL;
+
+	while (current != NULL) {
+		if (strcmp(current->date, d) == 0)
+		{
+			if (n == 0)
+			{
+				current2 = current;
+				previous2 = previous;
+			}
+			printf("Record No: %d\n", n);
+			print_record(current);
+			printf("\n");
+			n++;
+		}
+		previous = current;
+		current = current->next;
+	}
+
+	if (current2 == NULL)
+	{
+		puts("Record not found");
+		getch();
+		intro_screen(1);
+		return;
+	}
+	printf("Type record no to delete: ");
+	scanf("%d", &n);
+
+	for (i = 0; i < n; i++)
+	{
+		previous2 = current2;
+		current2 = current2->next;
+	}
+
+	if (current2 == NULL && previous2 == NULL)
+		printf("Not found\n");
+	else if (previous2 == NULL)
+	{
+		*head = current2->next;
+		free(current2);
+	}
+	else {
+		previous2->next = current2->next;
+		free(current2);
+	}
+
+	puts("\nRecord deleted successfully");
+	getch();
+
+}
 
 void intro_screen(int choice)
 {
@@ -104,13 +172,15 @@ void intro_screen(int choice)
 	printf("Personal Digital Diary\n\n");
 	printf("Choose a menu:\n");
 	if (choice == 1)
-		printf("==>1. Create a entry\n2. View all entry\n3. Change/Set Password\n4. Exit");
+		printf("==>1. Create a entry\n2. View all entry\n3. Delete record\n4. Change password\n5. Exit");
 	else if (choice == 2)
-		printf("1. Create a entry\n==>2. View all entry\n3. Change/Set Password\n4. Exit");
+		printf("1. Create a entry\n==>2. View all entry\n3. Delete record\n4. Change password\n5. Exit");
 	else if (choice == 3)
-		printf("1. Create a entry\n2. View all entry\n==>3. Change/Set Password\n4. Exit");
+		printf("1. Create a entry\n2. View all entry\n==>3. Delete record\n4. Change password\n5. Exit");
 	else if (choice == 4)
-		printf("1. Create a entry\n2. View all entry\n3. Change/Set Password\n==>4. Exit");
+		printf("1. Create a entry\n2. View all entry\n3. Delete record\n==>4. Change password\n5. Exit");
+	else if (choice == 5)
+		printf("1. Create a entry\n2. View all entry\n3. Delete record\n4. Change password\n==>5. Exit");
 }
 
 
@@ -148,7 +218,7 @@ void addEntry(struct entry **head)
 	{
 		printf("Time: ");
 		gets(n->time);
-	} 
+	}
 	formatTime(n->time);
 
 	printf("Text: ");
@@ -223,7 +293,12 @@ void write_to_file(struct entry *head, char pass[])
 	// save the entries in the database file
 	FILE *fp;
 	struct entry *current;
-	if (head == NULL) return;
+	if (head == NULL)
+	{
+		fp = fopen("DataBase.dat", "wb");
+		fclose(fp);
+		return;
+	}
 	current = head;
 
 	encrypt(current->date, pass);
@@ -305,4 +380,11 @@ void printelements(struct entry *head) {
 		printf("\n");
 	}
 	getch();
+}
+
+void print_record(struct entry *e)
+{
+	printf("Date: %s\n", e->date);
+	printf("Time: %s\n", e->time);
+	printf("Content: %s\n", e->content);
 }
