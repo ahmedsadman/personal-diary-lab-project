@@ -87,53 +87,25 @@ int checkTime(char t1[], char t2[])
 		return -1;
 }
 
-int generateToken(char key[])
+char generateKey(char pass[])
 {
-	// generates a token that is needed for the encryption
-	int token = strlen(key) / 2;
+	// generate an encyrption key based on password
+	int i;
+	char base = '!';
+	for (i = 0; i < strlen(pass); i++)
+		base += pass[i];
+	return '!' + ((strlen(pass)+base) % 92);
+}
+
+void encryptDecrypt(char text[], char pass[])
+{
+	// encrypt/decrypt using XOR encryption
+	char key = generateKey(pass);
 	int i;
 
-	for (i = 0; i < strlen(key); i++)
-	{
-		if (i % 2)
-			token -= key[i] % 10;
-		else
-			token += key[i] % 10;
-	}
-
-	return token;
+	for (i = 0; i < strlen(text); i++)
+		text[i] = text[i] ^ key;
 }
-
-void encrypt(char text[], char key[])
-{
-	int i = 0;
-	int token = generateToken(key);
-
-	while (1)
-	{
-		if (text[i] == '\0')
-			break;
-
-		text[i] = (i % 2 == 0) ? text[i] + token : text[i] - token;
-		i++;
-	}
-}
-
-
-void decrypt(char text[], char key[])
-{
-	int i = 0;
-	int token = generateToken(key);
-	while (1)
-	{
-		if (text[i] == '\0')
-			break;
-
-		text[i] = (i % 2 == 0) ? text[i] - token : text[i] + token;
-		i++;
-	}
-}
-
 
 void inputpass(char pass[])
 {
@@ -174,7 +146,7 @@ void SetPass(char pass[])
 	FILE *fp;
 	fp = fopen("userinfo.dat", "w");
 	// 2nd argument is a random encryption key, should be kept secret
-	encrypt(pass, "_1a2d_");
+	encryptDecrypt(pass, "_1a2d_");
 	fprintf(fp, pass);
 	fclose(fp);
 	puts("\nPassword set successfully");
@@ -188,7 +160,7 @@ void GetPass(char mypass[])
 	char pass[50];
 	fp = fopen("userinfo.dat", "r");
 	fgets(pass, 255, fp);
-	decrypt(pass, "_1a2d_");
+	encryptDecrypt(pass, "_1a2d_");
 	fclose(fp);
 	strcpy(mypass, pass);
 }

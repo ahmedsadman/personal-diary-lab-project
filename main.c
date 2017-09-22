@@ -54,7 +54,7 @@ int main(void)
 		inputpass(password);
 		SetPass(password);
 		// 2nd argument is a random key used for encryption, should be kept secret
-		decrypt(password, "_1a2d_");
+		encryptDecrypt(password, "_1a2d_");
 	}
 
 	//head = load(head, password);
@@ -301,9 +301,9 @@ void write_to_file(struct entry *head, char pass[])
 	}
 	current = head;
 
-	encrypt(current->date, pass);
-	encrypt(current->time, pass);
-	encrypt(current->content, pass);
+	encryptDecrypt(current->date, pass);
+	encryptDecrypt(current->time, pass);
+	encryptDecrypt(current->content, pass);
 
 	fp = fopen("DataBase.dat", "wb");
 	if (fp == NULL)
@@ -314,9 +314,9 @@ void write_to_file(struct entry *head, char pass[])
 		current = current->next;
 		if (current != NULL)
 		{
-			encrypt(current->date, pass);
-			encrypt(current->time, pass);
-			encrypt(current->content, pass);
+			encryptDecrypt(current->date, pass);
+			encryptDecrypt(current->time, pass);
+			encryptDecrypt(current->content, pass);
 		}
 	}
 	fclose(fp);
@@ -338,9 +338,9 @@ struct entry *load(struct entry *head, char pass[])
 		if(fread(record, sizeof(struct entry), 1, fp) == 1)
 		{
 			record->next = NULL;
-			decrypt(record->date, pass);
-			decrypt(record->time, pass);
-			decrypt(record->content, pass);
+			encryptDecrypt(record->date, pass);
+			encryptDecrypt(record->time, pass);
+			encryptDecrypt(record->content, pass);
 			head = record;
 			current = head;
 		} else // no records exist
@@ -354,9 +354,9 @@ struct entry *load(struct entry *head, char pass[])
 			break;
 
 		record->next = NULL;
-		decrypt(record->date, pass);
-		decrypt(record->time, pass);
-		decrypt(record->content, pass);
+		encryptDecrypt(record->date, pass);
+		encryptDecrypt(record->time, pass);
+		encryptDecrypt(record->content, pass);
 		current->next = record;
 		current = current->next;
 	}
