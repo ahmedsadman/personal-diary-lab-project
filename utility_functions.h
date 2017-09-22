@@ -100,11 +100,13 @@ char generateKey(char pass[])
 void encryptDecrypt(char text[], char pass[])
 {
 	// encrypt/decrypt using XOR encryption
-	char key = generateKey(pass);
+	char keys[2];
+	keys[0] = generateKey(pass);
+	keys[1] = pass[strlen(pass)/2];
 	int i;
 
 	for (i = 0; i < strlen(text); i++)
-		text[i] = text[i] ^ key;
+		text[i] = text[i] ^ keys[i % 2];
 }
 
 void inputpass(char pass[])
