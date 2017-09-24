@@ -23,6 +23,8 @@ struct entry *load(struct entry *head, char pass[]);
 void printelements(struct entry *head);
 void delete_record(struct entry **head);
 void print_record(struct entry *head);
+void search_menu(int choice);
+void search();
 
 int main(void)
 {
@@ -62,18 +64,18 @@ int main(void)
 	{
 		intro_screen(choice);
 		key_press = getche();
-		if (choice > 5 || choice < 1) choice = 1;
+		if (choice > 6 || choice < 1) choice = 1;
 
 		if (key_press == 72) // UP Arrow
 		{
 			choice--;
-			if (choice > 5 | choice < 1) choice = 1;
+			if (choice > 6 || choice < 1) choice = 1;
 			intro_screen(choice);
 		}
 		else if (key_press == 80) // Down Arrow
 		{
 			choice++;
-			if (choice > 5 || choice < 1) choice = 1;
+			if (choice > 6 || choice < 1) choice = 1;
 			intro_screen(choice);
 		}
 		else if (key_press == 13) // ENTER Key
@@ -83,12 +85,14 @@ int main(void)
 			else if (choice == 2)
 				printelements(head);
 			else if (choice == 3)
-				delete_record(&head);
+				search(head);
 			else if (choice == 4)
+				delete_record(&head);
+			else if (choice == 5)
 			{
 				changePass(password);
 			}
-			else if (choice == 5)
+			else if (choice == 6)
 			{
 				write_to_file(head, password);
 				break;
@@ -172,17 +176,94 @@ void intro_screen(int choice)
 	printf("Personal Digital Diary\n\n");
 	printf("Choose a menu:\n");
 	if (choice == 1)
-		printf("==>1. Create a entry\n2. View all entry\n3. Delete record\n4. Change password\n5. Exit");
+		printf("==>1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n6. Exit");
 	else if (choice == 2)
-		printf("1. Create a entry\n==>2. View all entry\n3. Delete record\n4. Change password\n5. Exit");
+		printf("1. Create a entry\n==>2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n6. Exit");
 	else if (choice == 3)
-		printf("1. Create a entry\n2. View all entry\n==>3. Delete record\n4. Change password\n5. Exit");
+		printf("1. Create a entry\n2. View all entry\n==>3. Search record\n4. Delete record\n5. Change password\n6. Exit");
 	else if (choice == 4)
-		printf("1. Create a entry\n2. View all entry\n3. Delete record\n==>4. Change password\n5. Exit");
+		printf("1. Create a entry\n2. View all entry\n3. Search record\n==>4. Delete record\n5. Change password\n6. Exit");
 	else if (choice == 5)
-		printf("1. Create a entry\n2. View all entry\n3. Delete record\n4. Change password\n==>5. Exit");
+		printf("1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n==>5. Change password\n6. Exit");
+	else if (choice == 6)
+		printf("1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n==>6. Exit");
 }
 
+void search_menu(int choice)
+{
+	system("cls");
+	printf("Personal Digital Diary\n\n");
+	printf("Search menu:\n");
+	if (choice == 1)
+		printf("==>1. Search by date\n2. Search by month\n3. Search last X days\n4. Go Back");
+	else if (choice == 2)
+		printf("1. Search by date\n==>2. Search by month\n3. Search last X days\n4. Go Back");
+	else if (choice == 3)
+		printf("1. Search by date\n2. Search by month\n==>3. Search last X days\n4. Go Back");
+	else if (choice == 4)
+		printf("1. Search by date\n2. Search by month\n3. Search last X days\n==>4. Go Back");
+}
+
+void search_by_date(struct entry *head)
+{
+	char d[30];
+	struct entry *current;
+	current = head;
+
+	printf("Search Date: ");
+	gets(d);
+	formatDate(d);
+
+	printf("\n");
+	while (current != NULL)
+	{
+		if (!strcmp(current->date, d))
+			print_record(current);
+		current = current->next;
+	}
+	getch();
+}
+
+void search(struct entry *head)
+{
+	int choice = 1;
+	char key_press;
+
+	while (1)
+	{
+		search_menu(choice);
+		key_press = getche();
+		if (choice > 4 || choice < 1) choice = 1;
+
+		if (key_press == 72) // UP Arrow
+		{
+			choice--;
+			if (choice > 4 || choice < 1) choice = 1;
+			search_menu(choice);
+		}
+		else if (key_press == 80) // Down Arrow
+		{
+			choice++;
+			if (choice > 4 || choice < 1) choice = 1;
+			search_menu(choice);
+		}
+		else if (key_press == 13) // ENTER Key
+		{
+			if (choice == 1)
+				search_by_date(head);
+			else if (choice == 2)
+				break;
+			else if (choice == 3)
+				break;
+			else if (choice == 4)
+			{
+				intro_screen(1);
+				return;
+			}
+		}
+	}
+
+}
 
 void addEntry(struct entry **head)
 {
@@ -371,6 +452,8 @@ void printelements(struct entry *head) {
 	current = head;
 	printf("\n\n");
 
+	if (current == NULL)
+		puts("No record found");
 	while (current != NULL) {
 		puts(current->date);
 		puts(current->time);
@@ -387,4 +470,5 @@ void print_record(struct entry *e)
 	printf("Date: %s\n", e->date);
 	printf("Time: %s\n", e->time);
 	printf("Content: %s\n", e->content);
+	printf("\n");
 }
