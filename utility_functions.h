@@ -25,7 +25,7 @@ char *reverseDate(char d[])
 	static char buffer[20];
 	int day, month, year;
 	sscanf(d, "%d/%d/%d", &day, &month, &year);
-	sprintf(buffer, "%d/%d/%d", year, month, day);
+	sprintf(buffer, "%d/%02d/%02d", year, month, day);
 	return buffer;
 }
 
