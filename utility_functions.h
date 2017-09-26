@@ -81,7 +81,12 @@ int checkTime(char t1[], char t2[])
 	ret1 = strstr(t1, "AM");
 	ret2 = strstr(t2, "AM");
 
-	if ((ret1 && ret2 && greater == 1) || (!ret1 && !ret2 && greater == 1) || (!ret1 && ret2))
+	// printf("greater: %d\n", greater);
+	if (ret1 && ret2 && greater == 1 && strcmp(t2, "12:00 AM") <= 0 && strcmp(t1, "12:00 AM") >=0)
+		return -1;
+	else if (ret1 && ret2 && greater == 2 && strcmp(t1, "12:00 AM") <= 0 && strcmp(t2, "12:00 AM") >= 0)
+		return 1;
+	else if ((ret1 && ret2 && greater == 1) || (!ret1 && !ret2 && greater == 1) || (!ret1 && ret2))
 		return 1;
 	else if ((ret1 && ret2 && greater == 2) || (!ret1 && !ret2 && greater == 2) || (ret1 && !ret2))
 		return -1;
