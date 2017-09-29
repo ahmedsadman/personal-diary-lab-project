@@ -92,6 +92,27 @@ int checkTime(char t1[], char t2[])
 		return -1;
 }
 
+int monthNumber(char month[])
+{
+	int i;
+	for (i = 0; i < strlen(month); i++)
+		month[i] = tolower(month[i]);
+
+	if (!strcmp(month, "january")) return 1;
+	else if (!strcmp(month, "february")) return 2;
+	else if (!strcmp(month, "march")) return 3;
+	else if (!strcmp(month, "april")) return 4;
+	else if (!strcmp(month, "may")) return 5;
+	else if (!strcmp(month, "june")) return 6;
+	else if (!strcmp(month, "july")) return 7;
+	else if (!strcmp(month, "august")) return 8;
+	else if (!strcmp(month, "september")) return 9;
+	else if (!strcmp(month, "october")) return 10;
+	else if (!strcmp(month, "november")) return 11;
+	else if (!strcmp(month, "december")) return 12;
+	else return 0;
+}
+
 char generateKey(char pass[])
 {
 	// generate an encyrption key based on password

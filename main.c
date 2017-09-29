@@ -224,6 +224,52 @@ void search_by_date(struct entry *head)
 	getch();
 }
 
+void search_by_month(struct entry *head)
+{
+	int num, total = 0;
+	int d, m, y, input_year;
+	struct entry *current;
+	current = head;
+	char month[20], in_y[10];
+
+	printf("\n\n");
+	printf("Month: ");
+	gets(month);
+	printf("Year (skip to search current): ");
+	gets(in_y);
+
+	if (strlen(in_y) == 0)
+	{
+		struct tm *t;
+		t = getCurrentTime();
+		input_year = 1900 + t->tm_year;
+	}
+	else input_year = atoi(in_y);
+	num = monthNumber(month);
+
+	while (num == 0)
+	{
+		puts("Invalid input. Please type a valid month");
+		printf("Month: ");
+		gets(month);
+		num = monthNumber(month);
+	}
+
+	while (current != NULL)
+	{
+		sscanf(current->date, "%d/%d/%d", &d, &m, &y);
+		if (m == num && y == input_year)
+		{
+			total++;
+			print_record(current);
+		}
+		current = current->next;
+	}
+
+	if (total == 0) puts("No record found");
+	getch();
+}
+
 void search(struct entry *head)
 {
 	int choice = 1;
@@ -252,7 +298,7 @@ void search(struct entry *head)
 			if (choice == 1)
 				search_by_date(head);
 			else if (choice == 2)
-				break;
+				search_by_month(head);
 			else if (choice == 3)
 				break;
 			else if (choice == 4)
