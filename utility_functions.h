@@ -123,7 +123,7 @@ char generateKey(char pass[])
 	return '!' + ((strlen(pass)+base) % 92);
 }
 
-void encryptDecrypt(char text[], char pass[])
+void encryptDecrypt(char text[], char pass[], int length)
 {
 	// encrypt/decrypt using XOR encryption
 	char keys[2];
@@ -131,7 +131,7 @@ void encryptDecrypt(char text[], char pass[])
 	keys[1] = pass[strlen(pass)/2];
 	int i;
 
-	for (i = 0; i < strlen(text); i++)
+	for (i = 0; i < length; i++)
 		text[i] = text[i] ^ keys[i % 2];
 }
 
@@ -174,7 +174,7 @@ void SetPass(char pass[])
 	FILE *fp;
 	fp = fopen("userinfo.dat", "w");
 	// 2nd argument is a random encryption key, should be kept secret
-	encryptDecrypt(pass, "_1a2d_");
+	encryptDecrypt(pass, "_1a2d_", 6);
 	fprintf(fp, pass);
 	fclose(fp);
 	puts("\nPassword set successfully");
@@ -188,7 +188,7 @@ void GetPass(char mypass[])
 	char pass[50];
 	fp = fopen("userinfo.dat", "r");
 	fgets(pass, 255, fp);
-	encryptDecrypt(pass, "_1a2d_");
+	encryptDecrypt(pass, "_1a2d_", 6);
 	fclose(fp);
 	strcpy(mypass, pass);
 }
