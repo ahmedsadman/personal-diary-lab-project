@@ -25,6 +25,7 @@ void delete_record(struct entry **head);
 void print_record(struct entry *head);
 void search_menu(int choice);
 void search();
+void search_past(struct entry *head);
 
 int main(void)
 {
@@ -224,6 +225,44 @@ void search_by_date(struct entry *head)
 	getch();
 }
 
+void search_past(struct entry *head)
+{
+	int x;
+	char currentDate[30];
+	char searchDate[30];
+	char today[30];
+	struct entry *current;
+	struct tm *t;
+	current = head;
+
+	printf("\n");
+	printf("X: ");
+	scanf("%d", &x);
+	t = getCurrentTime();
+	strftime(today,30,"%d/%m/%Y", t);
+
+	strcpy(searchDate, getPastTime(x));
+	strcpy(searchDate, reverseDate(searchDate));
+	strcpy(today, reverseDate(today));
+
+	while (current != NULL)
+	{
+		strcpy(currentDate, current->date);
+		strcpy(currentDate, reverseDate(currentDate));
+
+		// debug
+		// printf("Searching upto: %s\n", searchDate);
+		// printf("Current date: %s\n", currentDate);
+		// printf("Compare value: %d\n", strcmp(currentDate, searchDate));
+		// puts("=======================");
+
+		if (strcmp(currentDate, searchDate) >= 0 && strcmp(currentDate, today) <= 0)
+			print_record(current);
+		current = current->next;
+	}
+	getch();
+}
+
 void search_by_month(struct entry *head)
 {
 	int num, total = 0;
@@ -300,7 +339,7 @@ void search(struct entry *head)
 			else if (choice == 2)
 				search_by_month(head);
 			else if (choice == 3)
-				break;
+				search_past(head);
 			else if (choice == 4)
 			{
 				intro_screen(1);

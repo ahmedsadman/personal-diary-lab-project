@@ -92,6 +92,23 @@ int checkTime(char t1[], char t2[])
 		return -1;
 }
 
+char *getPastTime(int x)
+{
+	struct tm *t;
+	static char buffer[30];
+	t = getCurrentTime();
+
+	struct tm xmas = { 0, 0, 0, t->tm_mday, t->tm_mon, t->tm_year };
+	struct tm *mytime;
+
+	time_t rawtime = mktime(&xmas);
+	rawtime -= x*86400;
+	mytime = localtime(&rawtime);
+
+	sprintf(buffer, "%02d/%02d/%d", mytime->tm_mday, mytime->tm_mon+1, mytime->tm_year+1900);
+	return buffer;
+}
+
 int monthNumber(char month[])
 {
 	int i;
