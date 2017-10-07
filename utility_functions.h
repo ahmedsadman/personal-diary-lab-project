@@ -66,30 +66,67 @@ struct tm *getCurrentTime()
 	return info;
 }
 
+char *get24(char str[])
+{
+    // convert the given time in 24h format
+    static char newtime[20];
+    int i, j;
+    int h1 = (int)str[1] - '0';
+    int h2 = (int)str[0] - '0';
+    int hh = (h2 * 10 + h1 % 10);
+
+    // If time is in "AM"
+    if (str[6] == 'A')
+    {
+        if (hh == 12)
+        {
+            strcpy(newtime, "00");
+            for (i=2; i <= 4; i++)
+                newtime[i] = str[i];
+        }
+        else
+        {
+            for (i=0; i <= 4; i++)
+                newtime[i] = str[i];
+        }
+    }
+
+    // If time is in "PM"
+    else
+    {
+        if (hh == 12)
+        {
+            strcpy(newtime, "12");
+            for (i=2; i <= 4; i++)
+                newtime[i] = str[i];
+        }
+        else
+        {
+            hh = hh + 12;
+            sprintf(newtime, "%02d", hh);
+            for (i=2; i <= 4; i++)
+                newtime[i] = str[i];
+        }
+    }
+    newtime[5] = '\0';
+    return newtime;
+}
+
 int checkTime(char t1[], char t2[])
 {
 	// return -1 if t1 is less than t2, 0 if both are same, 1 otherwise
-	int greater;
-	char *ret1, *ret2;
-	if (strcmp(t1, t2) == 0) // both same
+	char time1[30];
+	char time2[30];
+
+	strcpy(time1, get24(t1));
+	strcpy(time2, get24(t2));
+
+	if (strcmp(time1, time2) == 0) // both same
 		return 0;
-	else if (strcmp(t1, t2) < 0) // t1 is smaller
-		greater = 2;
-	else // t2 is smaller
-		greater = 1;
-
-	ret1 = strstr(t1, "AM");
-	ret2 = strstr(t2, "AM");
-
-	// printf("greater: %d\n", greater);
-	if (ret1 && ret2 && greater == 1 && strcmp(t2, "12:00 AM") <= 0 && strcmp(t1, "12:00 AM") >=0)
+	else if (strcmp(time1, time2) < 0) // t1 is smaller
 		return -1;
-	else if (ret1 && ret2 && greater == 2 && strcmp(t1, "12:00 AM") <= 0 && strcmp(t2, "12:00 AM") >= 0)
+	else // t1 is greater OR t2 is smaller
 		return 1;
-	else if ((ret1 && ret2 && greater == 1) || (!ret1 && !ret2 && greater == 1) || (!ret1 && ret2))
-		return 1;
-	else if ((ret1 && ret2 && greater == 2) || (!ret1 && !ret2 && greater == 2) || (ret1 && !ret2))
-		return -1;
 }
 
 char *getPastTime(int x)
