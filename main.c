@@ -108,7 +108,7 @@ void delete_record(struct entry **head) {
 	struct entry *previous, *current, *current2, *previous2;
 	char d[50];
 	char choice;
-	int i, n = 0;
+	int i, n = 0, ndel = 0;
 	fflush(stdout);
 	printf("-------\n");
 	printf("Date: ");
@@ -123,15 +123,15 @@ void delete_record(struct entry **head) {
 	while (current != NULL) {
 		if (strcmp(current->date, d) == 0)
 		{
-			if (n == 0)
+			if (ndel == 0)
 			{
 				current2 = current;
 				previous2 = previous;
 			}
-			printf("Record No: %d\n", n);
+			printf("Record No: %d\n", ndel);
 			print_record(current);
 			printf("\n");
-			n++;
+			ndel++;
 		}
 		previous = current;
 		current = current->next;
@@ -144,8 +144,18 @@ void delete_record(struct entry **head) {
 		intro_screen(1);
 		return;
 	}
+
 	printf("Type record no to delete: ");
 	scanf("%d", &n);
+
+	// delete nothing due to invalid inputs
+	if (n > ndel-1 || n < 0)
+	{
+		puts("No record deleted");
+		getch();
+		intro_screen(1);
+		return;
+	}
 
 	for (i = 0; i < n; i++)
 	{
