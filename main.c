@@ -184,35 +184,42 @@ void intro_screen(int choice)
 {
 	// interactive menu system
 	system("cls");
-	printf("Personal Digital Diary\n\n");
-	printf("Choose a menu:\n");
+	printf("\n\t\t\t\t\tPERSONAL DIGITAL DIARY\n\n");
+	puts("\t\t\t___________________________________________________\n");
+	printf("\t\t\tMain Menu:\n\n");
+
 	if (choice == 1)
-		printf("==>1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n6. Exit");
+		printf("\t\t==>\t1. Create a entry\n\t\t\t2. View all entry\n\t\t\t3. Search record\n\t\t\t4. Delete record\n\t\t\t5. Change password\n\t\t\t6. Exit\n");
 	else if (choice == 2)
-		printf("1. Create a entry\n==>2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n6. Exit");
+		printf("\t\t\t1. Create a entry\n\t\t==>\t2. View all entry\n\t\t\t3. Search record\n\t\t\t4. Delete record\n\t\t\t5. Change password\n\t\t\t6. Exit\n");
 	else if (choice == 3)
-		printf("1. Create a entry\n2. View all entry\n==>3. Search record\n4. Delete record\n5. Change password\n6. Exit");
+		printf("\t\t\t1. Create a entry\n\t\t\t2. View all entry\n\t\t==>\t3. Search record\n\t\t\t4. Delete record\n\t\t\t5. Change password\n\t\t\t6. Exit\n");
 	else if (choice == 4)
-		printf("1. Create a entry\n2. View all entry\n3. Search record\n==>4. Delete record\n5. Change password\n6. Exit");
+		printf("\t\t\t1. Create a entry\n\t\t\t2. View all entry\n\t\t\t3. Search record\n\t\t==>\t4. Delete record\n\t\t\t5. Change password\n\t\t\t6. Exit\n");
 	else if (choice == 5)
-		printf("1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n==>5. Change password\n6. Exit");
+		printf("\t\t\t1. Create a entry\n\t\t\t2. View all entry\n\t\t\t3. Search record\n\t\t\t4. Delete record\n\t\t==>\t5. Change password\n\t\t\t6. Exit\n");
 	else if (choice == 6)
-		printf("1. Create a entry\n2. View all entry\n3. Search record\n4. Delete record\n5. Change password\n==>6. Exit");
+		printf("\t\t\t1. Create a entry\n\t\t\t2. View all entry\n\t\t\t3. Search record\n\t\t\t4. Delete record\n\t\t\t5. Change password\n\t\t==>\t6. Exit\n");
+
+    puts("\t\t\t___________________________________________________\n");
 }
 
 void search_menu(int choice)
 {
 	system("cls");
-	printf("Personal Digital Diary\n\n");
-	printf("Search menu:\n");
+	printf("\n\t\t\t\t\tPERSONAL DIGITAL DIARY\n\n");
+	puts("\t\t\t___________________________________________________\n");
+	printf("\t\t\tSearch Menu:\n\n");
 	if (choice == 1)
-		printf("==>1. Search by date\n2. Search by month\n3. Search last X days\n4. Go Back");
+		printf("\t\t==>\t1. Search by date\n\t\t\t2. Search by month\n\t\t\t3. Search last X days\n\t\t\t4. Go Back\n");
 	else if (choice == 2)
-		printf("1. Search by date\n==>2. Search by month\n3. Search last X days\n4. Go Back");
+		printf("\t\t\t1. Search by date\n\t\t==>\t2. Search by month\n\t\t\t3. Search last X days\n\t\t\t4. Go Back\n");
 	else if (choice == 3)
-		printf("1. Search by date\n2. Search by month\n==>3. Search last X days\n4. Go Back");
+		printf("\t\t\t1. Search by date\n\t\t\t2. Search by month\n\t\t==>\t3. Search last X days\n\t\t\t4. Go Back\n");
 	else if (choice == 4)
-		printf("1. Search by date\n2. Search by month\n3. Search last X days\n==>4. Go Back");
+		printf("\t\t\t1. Search by date\n\t\t\t2. Search by month\n\t\t\t3. Search last X days\n\t\t==>\t4. Go Back\n");
+
+    puts("\t\t\t___________________________________________________\n");
 }
 
 void search_by_date(struct entry *head)
