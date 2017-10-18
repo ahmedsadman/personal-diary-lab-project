@@ -218,6 +218,7 @@ void search_menu(int choice)
 void search_by_date(struct entry *head)
 {
 	char d[30];
+	int found = 0;
 	struct entry *current;
 	current = head;
 
@@ -229,15 +230,20 @@ void search_by_date(struct entry *head)
 	while (current != NULL)
 	{
 		if (!strcmp(current->date, d))
+		{
 			print_record(current);
+			found = 1;
+		}
 		current = current->next;
 	}
+
+	if (found == 0) puts("No records found");
 	getch();
 }
 
 void search_past(struct entry *head)
 {
-	int x;
+	int x, found = 0;
 	char currentDate[30];
 	char searchDate[30];
 	char today[30];
@@ -267,15 +273,20 @@ void search_past(struct entry *head)
 		// puts("=======================");
 
 		if (strcmp(currentDate, searchDate) >= 0 && strcmp(currentDate, today) <= 0)
+		{
 			print_record(current);
+			found = 1;
+		}
 		current = current->next;
 	}
+
+	if (found == 0) puts("No records found for the given time");
 	getch();
 }
 
 void search_by_month(struct entry *head)
 {
-	int num, total = 0;
+	int num, total = 0, found = 0;
 	int d, m, y, input_year;
 	struct entry *current;
 	current = head;
